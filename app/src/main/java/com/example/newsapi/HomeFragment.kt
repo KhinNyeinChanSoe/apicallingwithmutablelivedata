@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsapi.adapter.NewsAdapter
 import com.example.newsapi.api.ApiClient
+import com.example.newsapi.model.ArticlesItem
 import com.example.newsapi.model.News
 import com.example.newsapi.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -30,8 +33,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
        var homeFragment = ViewModelProvider(this).get(HomeViewModel::class.java)
+        var newsAdapter = NewsAdapter()
+        newRecycler.layoutManager = LinearLayoutManager(context)
+        newRecycler.adapter = newsAdapter
         homeFragment.loadArticle()
-        homeFragment.getArticle().observe(viewLifecycleOwner, Observer { news -> txtResult.text = news.toString() })
+        homeFragment.getArticle().observe(viewLifecycleOwner, Observer { news -> newsAdapter.updateArticle(news.articles as List<ArticlesItem>)})
 
     }
 }
